@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+  </head>
+  <body>
+    <div>Hello World!</div>
+    <input type="text" id="input" />
+    <button id="button">Run API</button>
+    <script>
+      logit = () => {
+        input = document.getElementById("input").value;
+        var pokeURL = `https://pokeapi.co/api/v2/pokemon/${input}/`;
+        console.log(input)
+        fetch(pokeURL)
+        .then(response => response.json())
+        .then(data => console.log(data["abilities"][0]['ability']['name']))
+        console.log('api sent')
+        console.log('hello world')
+      }
+      document.getElementById('button').addEventListener("click", logit)
+      
+    </script>
+  </body>
+</html>
