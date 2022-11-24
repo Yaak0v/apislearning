@@ -13,13 +13,17 @@
     <input type="text" id="input" />
     <button id="button">Run API</button>
     <script>
+      let hello = "3"
       logit = () => {
         input = document.getElementById("input").value;
         var pokeURL = `https://pokeapi.co/api/v2/pokemon/${input}/`;
         console.log(input)
         fetch(pokeURL)
         .then(response => response.json())
-        .then(data => console.log(data["abilities"][0]['ability']['name']))
+        .then(data => {
+          hello = data["abilities"][0]['ability']['name']
+          console.log(hello)
+        });
         console.log('api sent')
         console.log('hello world')
       }
