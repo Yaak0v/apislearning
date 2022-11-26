@@ -12,23 +12,38 @@
     <div>Choose Your Pokemon!</div>
     <input type="text" id="input" placeholder="Enter Pokemon name" />
     <button id="button">Run API</button>
-    <h1 id="name"></h1>
     <script>
-      let hello = "3"
+      const capitalize = (s) => s && s[0].toUpperCase() + s.slice(1);
       logit = () => {
         input = document.getElementById("input").value;
         var pokeURL = `https://pokeapi.co/api/v2/pokemon/${input}/`;
-        console.log(input)
+        console.log(input);
         fetch(pokeURL)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('name').innerHTML = data.name
-        });
-        console.log('api sent')
-        console.log('hello world')
-      }
-      document.getElementById('button').addEventListener("click", logit)
-      
+          .then((response) => response.json())
+          .then((data) => {
+            let nameNode = document.createElement("h1");
+            nameNode.innerHTML = capitalize(data.name);
+            let apiButton = document.getElementById("button");
+            apiButton.after(nameNode);
+
+            let abilitiesHeader = document.createElement("h2");
+            abilitiesHeader.innerHTML = "Abilities";
+            nameNode.after(abilitiesHeader);
+
+            let abilitiesNode = document.createElement("ol");
+            abilitiesNode.id = "abilitiesList";
+            abilitiesHeader.after(abilitiesNode);
+
+            data.abilities.map((ability) => {
+              let newAbility = document.createElement("li");
+              newAbility.innerHTML = capitalize(ability.ability.name);
+              abilitiesNode.append(newAbility);
+            });
+          });
+        console.log("api sent");
+        console.log("hello world");
+      };
+      document.getElementById("button").addEventListener("click", logit);
     </script>
   </body>
 </html>
