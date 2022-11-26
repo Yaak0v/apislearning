@@ -22,8 +22,7 @@
         fetch(pokeURL)
         .then(response => response.json())
         .then(data => {
-          hello = data
-          console.log(hello)
+            document.getElementById('name').innerHTML = data.name
         });
         console.log('api sent')
         console.log('hello world')
