@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h2 class="text-lg font-semibold text-indigo-600">Learning APIs</h2>
+        <h1
+          class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl"
+        >
+          Choose Your Pokemon!
+        </h1>
+        <div class="mt-5 flex justify-center">
+          <input
+            id="input"
+            type="text"
+            placeholder="Enter a pokemon"
+            class="block w-full appearance-none text-gray-600 rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm sm:max-w-xs"
+          />
+        </div>
+        <button
+          type="button"
+          id="button"
+          class="mt-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          Run API
+        </button>
+        <div id="pokemon-info" class="flex justify-center content-center align-center">
+          <div class="flex justify-evenly mt-10 md:w-3/4">
+            <div class="w-52">
+              <img id="pokemon-photo"  src="" alt="" />
+              <h2
+                id="pokemon-name"
+                class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
+              ></h2>
+            </div>
+            <div>
+              <h3
+                id="abilities-header"
+                class="text-lg text-left font-medium leading-6 text-gray-900"
+              ></h3>
+              <ol id="abilities-list" class="text-left"></ol>
+            </div>
+            <div>
+              <h3
+                id="stats-header"
+                class="text-lg text-left font-medium leading-6 text-gray-900"
+              ></h3>
+              <ol id="stats-list" class="text-left"></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const capitalize = (s) => (s && s[0].toUpperCase() + s.slice(1)) || "";
+      logit = () => {
+        input = document.getElementById("input").value;
+        var pokeURL = `https://pokeapi.co/api/v2/pokemon/${input}/`;
+        console.log(input);
+        let pokemonSections = [];
+        fetch(pokeURL)
+          .then((response) => response.json())
+          .then((data) => {
+            let abilitiesNode = document.getElementById("abilities-list");
+            pokemonSections.push(abilitiesNode);
+            let statsNode = document.getElementById("stats-list");
+            pokemonSections.map((node) => {
+              node.innerHTML = "";
+            });
+
+            let nameNode = document.getElementById("pokemon-name");
+            nameNode.innerHTML = capitalize(data.name);
+            pokemonSections.push(nameNode);
+
+            let photoNode = document.getElementById("pokemon-photo");
+            photoNode.src = data.sprites.other.dream_world.front_default;
+            pokemonSections.push(photoNode);
+
+            let abilitiesHeader = document.getElementById("abilities-header");
+            abilitiesHeader.innerHTML = "Abilities";
+            pokemonSections.push(abilitiesHeader);
+
+            data.abilities.map((ability) => {
+              let newAbility = document.createElement("li");
+              newAbility.innerHTML = capitalize(ability.ability.name);
+              abilitiesNode.append(newAbility);
+            });
+
+            let statsHeader = document.getElementById("stats-header");
+            statsHeader.innerHTML = "Stats";
+            pokemonSections.push(statsHeader);
+
+            data.stats.map((stat) => {
+              let newStat = document.createElement("li");
+              newStat.innerHTML = `${capitalize(stat.stat.name)}: ${
+                stat.base_stat
+              }`;
+              statsNode.append(newStat);
+            });
+          });
+        console.log("api sent");
+        console.log("hello world");
+      };
+      document.getElementById("button").addEventListener("click", logit);
+    </script>
+  </body>
+</html>
