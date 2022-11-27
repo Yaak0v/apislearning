@@ -33,7 +33,31 @@
         >
           Run API
         </button>
-        <div id="pokemon-info"></div>
+        <div id="pokemon-info" class="flex justify-center content-center align-center">
+          <div class="flex justify-evenly mt-10 md:w-3/4">
+            <div class="w-52">
+              <img id="pokemon-photo"  src="" alt="" />
+              <h2
+                id="pokemon-name"
+                class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
+              ></h2>
+            </div>
+            <div>
+              <h3
+                id="abilities-header"
+                class="text-lg text-left font-medium leading-6 text-gray-900"
+              ></h3>
+              <ol id="abilities-list" class="text-left"></ol>
+            </div>
+            <div>
+              <h3
+                id="stats-header"
+                class="text-lg text-left font-medium leading-6 text-gray-900"
+              ></h3>
+              <ol id="stats-list" class="text-left"></ol>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script>
@@ -42,33 +66,45 @@
         input = document.getElementById("input").value;
         var pokeURL = `https://pokeapi.co/api/v2/pokemon/${input}/`;
         console.log(input);
+        let pokemonSections = [];
         fetch(pokeURL)
           .then((response) => response.json())
           .then((data) => {
-            let pokemonInfo = document.getElementById("pokemon-info");
-            pokemonInfo.innerHTML = "";
+            let abilitiesNode = document.getElementById("abilities-list");
+            pokemonSections.push(abilitiesNode);
+            let statsNode = document.getElementById("stats-list");
+            pokemonSections.map((node) => {
+              node.innerHTML = "";
+            });
 
-            let nameNode = document.createElement("h1");
+            let nameNode = document.getElementById("pokemon-name");
             nameNode.innerHTML = capitalize(data.name);
-            let apiButton = document.getElementById("button");
-            pokemonInfo.append(nameNode);
+            pokemonSections.push(nameNode);
 
-            let photoNode = document.createElement("img");
+            let photoNode = document.getElementById("pokemon-photo");
             photoNode.src = data.sprites.other.dream_world.front_default;
-            nameNode.after(photoNode);
+            pokemonSections.push(photoNode);
 
-            let abilitiesHeader = document.createElement("h2");
+            let abilitiesHeader = document.getElementById("abilities-header");
             abilitiesHeader.innerHTML = "Abilities";
-            photoNode.after(abilitiesHeader);
-
-            let abilitiesNode = document.createElement("ol");
-            abilitiesNode.id = "abilitiesList";
-            abilitiesHeader.after(abilitiesNode);
+            pokemonSections.push(abilitiesHeader);
 
             data.abilities.map((ability) => {
               let newAbility = document.createElement("li");
               newAbility.innerHTML = capitalize(ability.ability.name);
               abilitiesNode.append(newAbility);
+            });
+
+            let statsHeader = document.getElementById("stats-header");
+            statsHeader.innerHTML = "Stats";
+            pokemonSections.push(statsHeader);
+
+            data.stats.map((stat) => {
+              let newStat = document.createElement("li");
+              newStat.innerHTML = `${capitalize(stat.stat.name)}: ${
+                stat.base_stat
+              }`;
+              statsNode.append(newStat);
             });
           });
         console.log("api sent");
