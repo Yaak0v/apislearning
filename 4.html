@@ -33,10 +33,13 @@
         >
           Run API
         </button>
-        <div id="pokemon-info" class="flex justify-center content-center align-center">
+        <div
+          id="pokemon-info"
+          class="flex justify-center content-center align-center"
+        >
           <div class="flex justify-evenly mt-10 md:w-3/4">
             <div class="w-52">
-              <img id="pokemon-photo"  src="" alt="" />
+              <img id="pokemon-photo" src="" alt="" />
               <h2
                 id="pokemon-name"
                 class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
@@ -62,17 +65,19 @@
     </div>
     <script>
       const capitalize = (s) => (s && s[0].toUpperCase() + s.slice(1)) || "";
-      logit = () => {
-        input = document.getElementById("input").value;
-        var pokeURL = `https://pokeapi.co/api/v2/pokemon/${input}/`;
-        console.log(input);
-        let pokemonSections = [];
-        fetch(pokeURL)
-          .then((response) => response.json())
-          .then((data) => {
+      async function logit() {
+            let input = document.getElementById("input").value;
+
+            var pokeURL = `https://pokeapi.co/api/v2/pokemon/${input}/`;
+
+            let pokemonSections = [];
+            let response = await fetch(pokeURL);
+
+            const data = await response.json();
             let abilitiesNode = document.getElementById("abilities-list");
             pokemonSections.push(abilitiesNode);
             let statsNode = document.getElementById("stats-list");
+            pokemonSections.push(statsNode);
             pokemonSections.map((node) => {
               node.innerHTML = "";
             });
@@ -106,10 +111,7 @@
               }`;
               statsNode.append(newStat);
             });
-          });
-        console.log("api sent");
-        console.log("hello world");
-      };
+      }
       document.getElementById("button").addEventListener("click", logit);
     </script>
   </body>
